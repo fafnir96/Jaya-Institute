@@ -83,7 +83,7 @@ with tab1:
 
 with tab2:
     st.header("Prediksi Risiko Dropout")
-    st.markdown("Masukkan data profil dan akademis siswa untuk memprediksi probabilitas siswa tersebut akan *dropout*.")
+    st.markdown("Masukkan data profil dan akademis siswa untuk memprediksi apakah siswa tersebut berisiko *dropout* atau akan *graduate*.")
     
     if model is not None and feature_names is not None:
         with st.form("prediction_form"):
@@ -132,18 +132,16 @@ with tab2:
                 prediction = model.predict(input_df)[0]
                 proba = model.predict_proba(input_df)[0]
                 
-                status_mapping = {0: 'Dropout', 1: 'Enrolled', 2: 'Graduate'}
+                status_mapping = {0: 'Dropout', 1: 'Graduate'}
                 pred_status = status_mapping[prediction]
                 
                 st.markdown("### Hasil Prediksi")
                 
                 if pred_status == 'Dropout':
-                    st.error(f"⚠️ **PERINGATAN TINGGI**: Siswa ini diprediksi berisiko **DROPOUT**.")
+                    st.error(f"⚠️ **PERINGATAN TINGGI**: Siswa ini diprediksi berisiko **DROPOUT**. (Probabilitas: {proba[0]:.2%})")
                     st.info("💡 **Rekomendasi Tindakan:** Segera jadwalkan sesi konseling dan tawarkan program bantuan akademis/finansial.")
-                elif pred_status == 'Enrolled':
-                    st.warning(f"⏳ **MENENGAH**: Siswa ini diprediksi tetap berstatus **ENROLLED**.")
                 else:
-                    st.success(f"✅ **AMAN**: Siswa ini diprediksi akan **GRADUATE**.")
+                    st.success(f"✅ **AMAN**: Siswa ini diprediksi akan **GRADUATE**. (Probabilitas: {proba[1]:.2%})")
                     
     else:
         st.error("Model machine learning belum dilatih. Harap jalankan Jupyter Notebook terlebih dahulu.")
