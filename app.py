@@ -45,7 +45,7 @@ with tab1:
     st.markdown("Bagian ini menampilkan eksplorasi data untuk faktor utama yang memengaruhi tingkat *dropout* di Jaya Jaya Institute. **(Untuk tampilan dashboard lebih interaktif menggunakan Google Looker Studio, silakan cek link di README.)**")
     
     try:
-        df = pd.read_csv('data.csv')
+        df = pd.read_csv('clean_data.csv')
         
         col1, col2, col3 = st.columns(3)
         total_students = len(df)
