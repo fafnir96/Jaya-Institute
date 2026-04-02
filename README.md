@@ -75,25 +75,29 @@ Berdasarkan hasil analisis eksplorasi data (EDA) pada notebook dan visualisasi d
 
 Model yang digunakan adalah **Random Forest Classifier** dengan pendekatan **binary classification** (Dropout vs Graduate). Data siswa berstatus `Enrolled` tidak dilibatkan dalam proses training karena belum memiliki label akhir, sehingga model lebih valid dan relevan.
 
+**Metrik utama yang digunakan adalah Recall (kelas Dropout)**, bukan accuracy, karena dalam konteks *early warning system*:
+- **False Negative** (gagal mendeteksi siswa yang benar-benar dropout) jauh lebih berbahaya daripada **False Positive** (salah mendeteksi siswa yang sebenarnya aman)
+- Memaksimalkan Recall Dropout berarti model mampu menangkap sebanyak mungkin siswa berisiko untuk diberikan intervensi dini
+
 Performa model pada data testing (20% dari total data Dropout + Graduate):
 
 | Metrik | Dropout | Graduate | Overall |
 |--------|---------|----------|---------|
 | **Precision** | 88% | 90% | — |
-| **Recall** | 84% | 93% | — |
+| **Recall** ⭐ | **85%** | 92% | — |
 | **F1-Score** | 86% | 91% | — |
-| **Accuracy** | — | — | **89.39%** |
+| **Accuracy** | — | — | 89% |
 
-- **Training Accuracy**: 89.39%
-- **Testing Accuracy**: 89.39%
-- **Gap (Overfit Indicator)**: 0.00 → Model tergolong **GOOD FIT** (tidak overfitting)
+- **Training Recall (Dropout)**: 86.72% | **Testing Recall (Dropout)**: 84.51% | Gap: 2.21%
+- **Training Accuracy**: 90.46% | **Testing Accuracy**: 89.26% | Gap: 1.21%
+- Gap yang kecil dan konsisten menunjukkan model tergolong **GOOD FIT** (tidak overfitting)
 
 **Fitur-fitur paling berpengaruh** (berdasarkan Feature Importance):
-1. `Curricular_units_2nd_sem_approved` (38.42%) — Jumlah MK disetujui Semester 2
-2. `Curricular_units_1st_sem_approved` (24.79%) — Jumlah MK disetujui Semester 1
-3. `Curricular_units_2nd_sem_grade` (12.50%) — Nilai Semester 2
-4. `Curricular_units_1st_sem_grade` (8.88%) — Nilai Semester 1
-5. `Tuition_fees_up_to_date` (8.32%) — Status Pembayaran SPP
+1. `Curricular_units_2nd_sem_approved` (37.26%) — Jumlah MK disetujui Semester 2
+2. `Curricular_units_1st_sem_approved` (21.52%) — Jumlah MK disetujui Semester 1
+3. `Curricular_units_2nd_sem_grade` (12.95%) — Nilai Semester 2
+4. `Curricular_units_1st_sem_grade` (8.85%) — Nilai Semester 1
+5. `Tuition_fees_up_to_date` (8.03%) — Status Pembayaran SPP
 
 Hasil ini mengkonfirmasi bahwa **performa akademik di tahun pertama** dan **status finansial** adalah prediktor terkuat terhadap risiko dropout.
 
