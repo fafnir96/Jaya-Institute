@@ -45,7 +45,7 @@ with tab1:
     st.markdown("Bagian ini menampilkan eksplorasi data untuk faktor utama yang memengaruhi tingkat *dropout* di Jaya Jaya Institute. **(Untuk tampilan dashboard lebih interaktif menggunakan Google Looker Studio, silakan cek link di README.)**")
     
     try:
-        df = pd.read_csv('data.csv')
+        df = pd.read_csv('https://raw.githubusercontent.com/dicodingacademy/dicoding_dataset/main/students_performance/data.csv')
         
         col1, col2, col3 = st.columns(3)
         total_students = len(df)
@@ -138,12 +138,12 @@ with tab2:
                 st.markdown("### Hasil Prediksi")
                 
                 if pred_status == 'Dropout':
-                    st.error(f"⚠️ **PERINGATAN TINGGI**: Siswa ini diprediksi berisiko **DROPOUT**. (Probabilitas: {proba[0]:.2%})")
+                    st.error(f"⚠️ **PERINGATAN TINGGI**: Siswa ini diprediksi berisiko **DROPOUT**.")
                     st.info("💡 **Rekomendasi Tindakan:** Segera jadwalkan sesi konseling dan tawarkan program bantuan akademis/finansial.")
                 elif pred_status == 'Enrolled':
-                    st.warning(f"⏳ **MENENGAH**: Siswa ini diprediksi tetap berstatus **ENROLLED**. (Probabilitas: {proba[1]:.2%})")
+                    st.warning(f"⏳ **MENENGAH**: Siswa ini diprediksi tetap berstatus **ENROLLED**.")
                 else:
-                    st.success(f"✅ **AMAN**: Siswa ini diprediksi akan **GRADUATE**. (Probabilitas: {proba[2]:.2%})")
+                    st.success(f"✅ **AMAN**: Siswa ini diprediksi akan **GRADUATE**.")
                     
     else:
         st.error("Model machine learning belum dilatih. Harap jalankan Jupyter Notebook terlebih dahulu.")
