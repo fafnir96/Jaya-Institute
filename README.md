@@ -37,8 +37,7 @@ pip install -r requirements.txt
 ## Business Dashboard
 Telah dibuat sebuah dashboard interaktif berbasis *Looker Studio* untuk mengecek metrik utama terkait performa siswa dan mengeksplorasi hubungan *dropout* dengan faktor-faktor akademis dan finansial.
 
-**Link Dashboard Looker Studio:**
-*(Tautan menuju Google Looker Studio yang akan disiapkan oleh Anda, atau cek tangkapan layarnya pada `username_dicoding-dashboard.jpg` di folder ini)*
+**Link Dashboard Looker Studio:** https://lookerstudio.google.com/reporting/81e38b1f-e5b7-4bf2-8e1b-0835db5ce784
 
 Catatan Tambahan: Fitur *fallback* dashboard interaktif juga telah ditanamkan ke dalam tab 1 purwarupa Web Streamlit di `app.py`.
 
