@@ -11,8 +11,8 @@ Jaya Jaya Institut merupakan salah satu institusi pendidikan perguruan tinggi ya
 ### Cakupan Proyek
 1. **Eksplorasi dan Analisis Data (EDA):** Menganalisis karakteristik demografis, latar belakang sosial-ekonomi, dan performa akademik awal para siswa.
 2. **Pembuatan Dashboard Analitik (Looker Studio):** Memvisualisasikan *key indicators* seperti persentase *dropout* dari total siswa, hubungan antara usia pendaftaran mahasiswa, status beasiswa, tunggakan SPP dengan status *dropout*.
-3. **Membangun Model Prediksi (Machine Learning):** Menggunakan model klasifikasi (Random Forest) untuk memprediksi probabilitas siswa akan *dropout* berdasarkan fitur-fitur yang disediakan dari 2 database universitas.
-4. **Deploy Aplikasi Prediktif Interaktif:** Mengembangkan purwarupa web interaktif dengan Streamlit yang dapat diakses oleh konselor akademik untuk memasukkan data siswa guna melihat rekomendasi statusnya (*Dropout*, *Enrolled*, atau *Graduate*).
+3. **Membangun Model Prediksi (Machine Learning):** Menggunakan model klasifikasi (Random Forest) dengan pendekatan *binary classification* untuk memprediksi apakah siswa akan *Dropout* atau *Graduate*. Data siswa berstatus *Enrolled* tidak dilibatkan dalam training karena belum memiliki label akhir, sehingga model lebih valid dan relevan.
+4. **Deploy Aplikasi Prediktif Interaktif:** Mengembangkan purwarupa web interaktif dengan Streamlit yang dapat diakses oleh konselor akademik untuk memasukkan data siswa guna melihat rekomendasi statusnya (*Dropout* atau *Graduate*).
 
 ### Persiapan
 
@@ -44,8 +44,7 @@ Catatan Tambahan: Fitur *fallback* dashboard interaktif juga telah ditanamkan ke
 ## Menjalankan Sistem Machine Learning
 Prototype sistem Machine Learning telah dibangun menggunakan framework web Streamlit. Sistem mereduksi ratusan fitur dan berfokus pada fitur krusial agar konselor dapat mendeteksi ancaman *dropout* dengan mudah. 
 
-Aplikasi juga bisa diakses via Cloud secara publik pada tautan (silahkan tautkan link Streamlit Community Cloud di sini setelah Anda mendeploynya ke GitHub): 
-**Link Streamlit Community Cloud:** https://jaya-institute-12.streamlit.app/
+Aplikasi juga bisa diakses via Cloud secara publik pada tautan **Link Streamlit Community Cloud:** https://jaya-institute-12.streamlit.app/
 
 Cara menjalankan dari sistem lokal:
 ```bash
@@ -59,13 +58,48 @@ streamlit run app.py
 ```
 
 ## Conclusion
-Dari proyek *Data Science* yang telah dikerjakan, kami dapat merangkum kesimpulan berikut ini:
-1. **Faktor Finansial merupakan Determinan Utama:** Data secara jelas menunjukkan bahwa siswa dengan status *Tuition fees up to date* = 0 (menunggak SPP) dan bukan penerima beasiswa memiliki peluang untuk *dropout* dengan margin yang sangat luar biasa tinggi dibandingkan pemegang beasiswa dan siswa lunas.
-2. **Performa Akademik di Tahun Pertama Sangat Kritis:** Tingkat *curricular units approved* serta *grades* (nilai) mahasiswa di pendaftaran semester pertama dan kedua begitu berbanding terbalik dan memiliki korelasi kuat terhadap putus sekolah. Mahasiswa yang banyak gagal di tahun pertama sering berakhir dengan *dropout*.
-3. **Akurasi Model Prediksi:** Model **Random Forest Classifier** yang dilatih berhasil belajar secara tangguh dari himpunan fitur data tersebut (accuracy mendakati/melebihi 78% untuk skenario *multi-class*). Hal ini membantu mendeteksi risiko dan memberikan probabilitas secara tajam.
+
+Dari proyek *Data Science* yang telah dikerjakan, telah dirangkum dua jenis kesimpulan berikut:
+
+### Kesimpulan 1: Faktor-Faktor dan Karakteristik Dropout (Berdasarkan EDA & Dashboard)
+
+Berdasarkan hasil analisis eksplorasi data (EDA) pada notebook dan visualisasi dashboard Looker Studio, ditemukan faktor-faktor dan karakteristik utama yang berkaitan dengan terjadinya *dropout*:
+
+1. **Faktor Finansial merupakan Determinan Paling Dominan:** Data secara jelas menunjukkan bahwa siswa yang menunggak SPP (`Tuition_fees_up_to_date = 0`) memiliki proporsi *dropout* yang sangat tinggi dibandingkan siswa yang lunas. Demikian pula, siswa yang **bukan** penerima beasiswa (`Scholarship_holder = 0`) dan siswa yang berstatus *debtor* (`Debtor = 1`) lebih rentan untuk keluar dari institusi.
+
+2. **Performa Akademik di Tahun Pertama Sangat Kritis:** Jumlah mata kuliah yang disetujui (`Curricular_units_1st_sem_approved` dan `Curricular_units_2nd_sem_approved`) serta nilai rata-rata (`grade`) di semester 1 dan 2 memiliki perbedaan yang sangat signifikan antara kelompok Dropout dan Graduate. Mahasiswa yang banyak gagal atau mendapatkan nilai rendah di tahun pertama sangat rentan untuk tidak menyelesaikan pendidikan. Korelasi antara fitur-fitur akademik ini juga terkonfirmasi kuat melalui heatmap korelasi.
+
+3. **Usia Pendaftaran Berpengaruh:** Analisis boxplot menunjukkan bahwa mahasiswa yang mendaftar pada usia lebih matang (di atas 25 tahun) memiliki pola dropout yang berbeda, kemungkinan disebabkan oleh faktor pekerjaan atau tanggung jawab keluarga yang bersaing dengan waktu studi.
+
+### Kesimpulan 2: Performa Model Machine Learning
+
+Model yang digunakan adalah **Random Forest Classifier** dengan pendekatan **binary classification** (Dropout vs Graduate). Data siswa berstatus `Enrolled` tidak dilibatkan dalam proses training karena belum memiliki label akhir, sehingga model lebih valid dan relevan.
+
+Performa model pada data testing (20% dari total data Dropout + Graduate):
+
+| Metrik | Dropout | Graduate | Overall |
+|--------|---------|----------|---------|
+| **Precision** | 88.48% | 89.93% | — |
+| **Recall** | 83.80% | 92.99% | — |
+| **F1-Score** | 86.08% | 91.43% | — |
+| **Accuracy** | — | — | **89.39%** |
+
+- **Training Accuracy**: 89.39%
+- **Testing Accuracy**: 89.39%
+- **Gap (Overfit Indicator)**: 0.00 → Model tergolong **GOOD FIT** (tidak overfitting)
+
+**Fitur-fitur paling berpengaruh** (berdasarkan Feature Importance):
+1. `Curricular_units_2nd_sem_approved` (38.42%) — Jumlah MK disetujui Semester 2
+2. `Curricular_units_1st_sem_approved` (24.79%) — Jumlah MK disetujui Semester 1
+3. `Curricular_units_2nd_sem_grade` (12.50%) — Nilai Semester 2
+4. `Curricular_units_1st_sem_grade` (8.88%) — Nilai Semester 1
+5. `Tuition_fees_up_to_date` (8.32%) — Status Pembayaran SPP
+
+Hasil ini mengkonfirmasi bahwa **performa akademik di tahun pertama** dan **status finansial** adalah prediktor terkuat terhadap risiko dropout.
 
 ### Rekomendasi Action Items
-Berdasarkan hasil analisis dan pemodelan, kami merekomendasikan hal berikut untuk Jaya Jaya Institut guna mencapai target (*zero warning risk dropout*):
+
+Berdasarkan hasil analisis dan pemodelan, direkomendasikan hal berikut untuk Jaya Jaya Institut guna mencapai target (*zero warning risk dropout*):
 - **Sistem *Early Warning* Akademik (Mentoring Wajib):** Mahasiswa yang mengalami kegagalan (*not approved*) pada mata kuliah semester 1, atau masuk dalam kategori prediksi Risiko Tinggi oleh aplikasi ini harus diharuskan mengambil sesi konseling wajib dan ditawarkan program mentoring rekan sejawat (Peer Tutoring) sebelum masuk semester 3.
-- **Bantuan Edukasi / Relaksasi Finansial:** Karena tingginya hubungan gagal bayar SPP (*not up to date*) dengan putus sekolah, kampus perlu membuka pintu komunikasi proaktif menawarkan rencana cicilan, pekerjaan paruh waktu di dalam kampus, atau beasiswa darurat jika sistem mendeteksi mereka terlambat membayar dua bulan beturut-turut.
+- **Bantuan Edukasi / Relaksasi Finansial:** Karena tingginya hubungan gagal bayar SPP (*not up to date*) dengan putus sekolah, kampus perlu membuka pintu komunikasi proaktif menawarkan rencana cicilan, pekerjaan paruh waktu di dalam kampus, atau beasiswa darurat jika sistem mendeteksi mereka terlambat membayar dua bulan berturut-turut.
 - **Adaptasi Mahasiswa "Tua" atau Pekerja:** Mahasiswa yang baru mengambil program saat usianya sudah lebih matang (lebih dari 22 tahun) atau malam hari memiliki pola rintangan beda. Pihak Manajemen disarankan menambah fleksibilitas kursus secara daring (hybrid) agar tak membebani waktu atau tenaga kerja mereka.
