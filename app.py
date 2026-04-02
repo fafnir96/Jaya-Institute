@@ -21,11 +21,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-@st.cache_resource
+@st.cache_resource(ttl=300)  # Cache 5 menit lalu reload otomatis
 def load_model_and_features():
     try:
         model = joblib.load('model/rf_model.joblib')
-        import json
         with open('model/features.json', 'r') as f:
             features = json.load(f)
         return model, features
@@ -34,6 +33,11 @@ def load_model_and_features():
         return None, None
 
 model, feature_names = load_model_and_features()
+
+# Debug: tampilkan info model di sidebar
+if model is not None:
+    st.sidebar.markdown(f"**Model classes:** `{list(model.classes_)}`")
+    st.sidebar.markdown(f"**Jumlah kelas:** `{len(model.classes_)}`")
 
 st.title("🎓 Jaya Jaya Institute - Student Dashboard & Predictor")
 st.markdown("---")
@@ -105,7 +109,6 @@ with tab2:
                 admission_grade = st.number_input("Admission grade", min_value=0.0, max_value=200.0, value=100.0)
 
             st.markdown("---")
-            st.markdown("*Fitur lainnya disetel pada nilai median otomatis untuk memudahkan prototipe ini.*")
             
             submit_button = st.form_submit_button(label="🔮 Analisis Risiko Siswa")
             
