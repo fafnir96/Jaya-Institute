@@ -46,7 +46,7 @@ Catatan Tambahan: Fitur *fallback* dashboard interaktif juga telah ditanamkan ke
 Prototype sistem Machine Learning telah dibangun menggunakan framework web Streamlit. Sistem mereduksi ratusan fitur dan berfokus pada fitur krusial agar konselor dapat mendeteksi ancaman *dropout* dengan mudah. 
 
 Aplikasi juga bisa diakses via Cloud secara publik pada tautan (silahkan tautkan link Streamlit Community Cloud di sini setelah Anda mendeploynya ke GitHub): 
-**Link Streamlit Community Cloud:** https://(YOUR-APP-URL).streamlit.app/
+**Link Streamlit Community Cloud:** https://jaya-institute-12.streamlit.app/
 
 Cara menjalankan dari sistem lokal:
 ```bash
