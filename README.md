@@ -79,9 +79,9 @@ Performa model pada data testing (20% dari total data Dropout + Graduate):
 
 | Metrik | Dropout | Graduate | Overall |
 |--------|---------|----------|---------|
-| **Precision** | 88.48% | 89.93% | — |
-| **Recall** | 83.80% | 92.99% | — |
-| **F1-Score** | 86.08% | 91.43% | — |
+| **Precision** | 88% | 90% | — |
+| **Recall** | 84% | 93% | — |
+| **F1-Score** | 86% | 91% | — |
 | **Accuracy** | — | — | **89.39%** |
 
 - **Training Accuracy**: 89.39%
